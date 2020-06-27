@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from  .forms import Image
 from .testss import handle_uploaded_file
 
-# Create your views here.
 def upload_file(request):
     if request.method == 'POST':
         form = Image(request.POST, request.FILES)

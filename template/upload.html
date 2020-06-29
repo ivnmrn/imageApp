@@ -4,7 +4,11 @@
 	<div class="container">
 		<h1>Welcome</h1>
 		<form class="form" method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{ form.as_p }} 
+			{% csrf_token %}
+			<label class="custom-file">
+				<input type="file" id="selectedFile" style="display: none;" name="file"/>
+				<input type="button" value="Select file" onclick="document.getElementById('selectedFile').click();" />
+			</label>
 			<button type="submit" id="login-button">Submit</button>
 		</form>
 	</div>

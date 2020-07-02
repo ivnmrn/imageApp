@@ -18,7 +18,8 @@ def get_latitude_longitude(geotags):
     lat = get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
     lon = get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
 
-    return lon, lat
+    result = dict(latitude=lat, longitude=lon)
+    return result
 
 def get_degrees(exif):
 
@@ -41,7 +42,7 @@ def handle_uploaded_image(image):
         if 'GPSInfo' in exif:
             cordenates = get_degrees(exif)
             location = get_latitude_longitude(cordenates)
-            print(location)
+            return location
         else:
             print('dep')
             # get_exif(exif)

@@ -1,0 +1,8 @@
+.marker {
+    background-image: url('https://cdn0.iconfinder.com/data/icons/ui-essence/32/_95ui-512.png');
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+}

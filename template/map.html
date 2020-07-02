@@ -1,0 +1,41 @@
+{% load static %}
+<link rel='stylesheet' href="{% static 'map_style.css' %}">
+
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+
+
+<div id='map' style='width: 1000px; height: 800px;'></div>
+
+<script>
+    mapboxgl.accessToken = 'YOUR_TOKEN';
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+    center: [10.20375, 47.46691], // starting position [lng, lat]
+    zoom: 9 // starting zoom
+    });
+    var geojson = {
+    type: 'FeatureCollection',
+    features: [
+    {
+        type: 'Feature',
+        geometry: {
+        type: 'Point',
+        coordinates: [10.20375, 47.46691]
+        },
+    }]
+    };
+    geojson.features.forEach(function(marker) {
+
+    // create a HTML element for each feature
+    var el = document.createElement('div');
+    el.className = 'marker';
+
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .addTo(map);
+    });
+</script>

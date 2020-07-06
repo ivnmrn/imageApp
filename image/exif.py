@@ -8,9 +8,9 @@ def get_decimal_from_dms(dms, ref):
     seconds = dms[2][0] / dms[2][1] / 3600.0
 
     if ref in ['S', 'W']:
-        degrees = -degrees
-        minutes = -minutes
-        seconds = -seconds
+        degrees *= -1
+        minutes *= -1
+        seconds *= -1
 
     return round(degrees + minutes + seconds, 5)
 
@@ -22,7 +22,7 @@ def get_latitude_longitude(geotags):
     return result
 
 def get_degrees(exif):
-
+    
     geo = {}
     for key, val in exif['GPSInfo'].items():
         if GPSTAGS[key][:4] == 'GPSL':
@@ -32,35 +32,24 @@ def get_degrees(exif):
 def handle_uploaded_image(image):
 
     img = Image.open(image)
+    
+    location = {'latitude': 0, 'longitude': -0}
     exif = {}
 
     try:
         for key, value in img._getexif().items():
             if key in ExifTags.TAGS and key != 37500:
                 exif[ExifTags.TAGS[key]] = value
-        # print(exif)
-        if 'GPSInfo' in exif:
+    except AttributeError:
+        # return(ValueError('No metadata found'), False)
+        raise ValueError('No metadata found')
+    
+    if(exif):
+        if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
             cordenates = get_degrees(exif)
             location = get_latitude_longitude(cordenates)
-            return location
+            result = dict(location=location, exif=exif)
+            return result
         else:
-            print('dep')
-            # get_exif(exif)
-    except AttributeError:
-        raise ValueError
-
-
-
-
-
-
-
-
-
-# def get_exif(exif):
-
-#     expected_values = ['Make', 'Model', 'Software', 'DateTimeOriginal', 'ColorSpace']
-
-#     for key, val in exif.items():
-#         if key in expected_values:
-#             print(key, val)
+            result = dict(location=location, exif=exif)
+            return result

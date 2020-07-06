@@ -19,7 +19,7 @@ from image import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test/', views.upload_file),
+    path('image/', views.upload_file),
 ]
 
 STATIC_URL = '/static/'

@@ -1,0 +1,55 @@
+from PIL import Image, ExifTags
+from PIL.ExifTags import TAGS, GPSTAGS
+
+def get_decimal_from_dms(dms, ref):
+
+    degrees = dms[0][0] / dms[0][1]
+    minutes = dms[1][0] / dms[1][1] / 60.0
+    seconds = dms[2][0] / dms[2][1] / 3600.0
+
+    if ref in ['S', 'W']:
+        degrees *= -1
+        minutes *= -1
+        seconds *= -1
+
+    return round(degrees + minutes + seconds, 5)
+
+def get_latitude_longitude(geotags):
+    lat = get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
+    lon = get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
+
+    result = dict(latitude=lat, longitude=lon)
+    return result
+
+def get_degrees(exif):
+    
+    geo = {}
+    for key, val in exif['GPSInfo'].items():
+        if GPSTAGS[key][:4] == 'GPSL':
+            geo[GPSTAGS[key]] = val
+    return geo
+
+def handle_uploaded_image(image):
+
+    img = Image.open(image)
+    
+    location = {'latitude': 0, 'longitude': -0}
+    exif = {}
+
+    try:
+        for key, value in img._getexif().items():
+            if key in ExifTags.TAGS and key != 37500:
+                exif[ExifTags.TAGS[key]] = value
+    except AttributeError:
+        # return(ValueError('No metadata found'), False)
+        raise ValueError('No metadata found')
+    
+    if(exif):
+        if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
+            cordenates = get_degrees(exif)
+            location = get_latitude_longitude(cordenates)
+            result = dict(location=location, exif=exif)
+            return result
+        else:
+            result = dict(location=location, exif=exif)
+            return result

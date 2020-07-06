@@ -1,0 +1,66 @@
+{% load static %}
+<link rel='stylesheet' href="{% static 'map_style.css' %}">
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+
+<body>
+<header class="header"></header>
+<div id='map'></div>
+<div class="information">
+<table>
+    <thead>
+      <tr>
+        <th>Date Time
+        <th>Make
+        <th>Model
+        <th>Software
+        <th>ColorSpace
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{exif.DateTimeOriginal}}
+        <td>{{exif.Make}}
+        <td>{{exif.Model}}
+        <td>{{exif.Software}}
+        <td>{{exif.ColorSpace}}
+      <tr>
+    </tbody>
+  </table>
+</div>
+<footer class="footer"></footer>
+</body>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYWl2YW5zMTEiLCJhIjoiY2tjNGs4dDRrMDZiYzMwcXA4NjJrN2xpdiJ9.vQjnx7o4zgk66ereMBfXpg';
+    var cordenates = JSON.parse("{{cordenates|escapejs}}"); 
+    console.log(cordenates);
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+    center: [cordenates['longitude'], cordenates['latitude']],
+    zoom: 9 // starting zoom
+    });
+
+    var geojson = {
+    type: 'FeatureCollection',
+    features: [
+    {
+        type: 'Feature',
+        geometry: {
+            type: 'Point',
+            coordinates: [cordenates['longitude'], cordenates['latitude']]
+        },
+    }]
+    };
+
+    geojson.features.forEach(function(marker) {
+    // create a HTML element for each feature
+    var el = document.createElement('div');
+    el.className = 'marker';
+    // make a marker for each feature and add to the map
+    new mapboxgl.Marker(el)
+        .setLngLat(marker.geometry.coordinates)
+        .addTo(map);
+    });
+</script>

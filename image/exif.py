@@ -32,24 +32,18 @@ def get_degrees(exif):
 def handle_uploaded_image(image):
 
     img = Image.open(image)
-    
-    location = {'latitude': 0, 'longitude': -0}
     exif = {}
 
-    try:
+    if (img._getexif()):
         for key, value in img._getexif().items():
             if key in ExifTags.TAGS and key != 37500:
                 exif[ExifTags.TAGS[key]] = value
-    except AttributeError:
-        # return(ValueError('No metadata found'), False)
-        raise ValueError('No metadata found')
     
-    if(exif):
-        if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
-            cordenates = get_degrees(exif)
-            location = get_latitude_longitude(cordenates)
-            result = dict(location=location, exif=exif)
-            return result
-        else:
-            result = dict(location=location, exif=exif)
-            return result
+    if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
+        cordenates = get_degrees(exif)
+        location = get_latitude_longitude(cordenates)
+        result = dict(location=location, exif=exif)
+        return result
+    else:
+        result = dict(exif=exif)
+        return result

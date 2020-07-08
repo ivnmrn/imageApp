@@ -1,4 +1,4 @@
-"""image_app URL Configuration
+"""project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from image import views
+from geo_location import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('image/', views.upload_file),
+    path('geo_location/', views.upload_file),
 ]
 
 STATIC_URL = '/static/'

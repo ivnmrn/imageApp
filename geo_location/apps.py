@@ -1,3 +1,3 @@
 from django.apps import AppConfig
 class ImageConfig(AppConfig):
-    name = 'image'
+    name = 'geo_location'

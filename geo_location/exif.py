@@ -15,11 +15,12 @@ def get_decimal_from_dms(dms, ref):
     return round(degrees + minutes + seconds, 5)
 
 
-def get_latitude_longitude(geo_tags):
-    lat = get_decimal_from_dms(geo_tags['GPSLatitude'], geo_tags['GPSLatitudeRef'])
-    lon = get_decimal_from_dms(geo_tags['GPSLongitude'], geo_tags['GPSLongitudeRef'])
+def get_latitude_longitude(geotags):
+    lat = get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
+    lon = get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
 
-    return dict(latitude=lat, longitude=lon)
+    result = dict(latitude=lat, longitude=lon)
+    return result
 
 
 def get_degrees(exif):
@@ -27,7 +28,6 @@ def get_degrees(exif):
     for key, val in exif['GPSInfo'].items():
         if GPSTAGS[key][:4] == 'GPSL':
             geo[GPSTAGS[key]] = val
-
     return geo
 
 

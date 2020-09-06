@@ -12,11 +12,9 @@ def upload_file(request):
             result = handle_uploaded_image(request.FILES['file'])
             if 'location' in result:
                 data_json = dumps(result['location'])
-                return render(request, 'map.html', {'coordinates': data_json,
-                                                    'exif': result['exif']
-                                                    })
+                return render(request, 'map.html', {'cordenates': data_json, 'exif': result['exif']})
             else:
-                return render(request, 'map_no_coordinates.html')
+                return render(request, 'map_no_cordenates.html', {'exif': result['exif']})
     else:
         form = Image()
     return render(request, 'upload.html', {'form': form})

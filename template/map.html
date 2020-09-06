@@ -32,8 +32,9 @@
 </body>
 
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiYWl2YW5zMTEiLCJhIjoiY2tjNGs4dDRrMDZiYzMwcXA4NjJrN2xpdiJ9.vQjnx7o4zgk66ereMBfXpg';
-    var cordenates = JSON.parse("{{coordinates|escapejs}}");
+    mapboxgl.accessToken = 'YOUR_TOKEN';
+    var cordenates = JSON.parse("{{cordenates|escapejs}}");
+    console.log(cordenates);
     var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location

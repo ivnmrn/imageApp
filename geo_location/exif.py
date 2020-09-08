@@ -1,5 +1,13 @@
 from PIL import Image, ExifTags
 from PIL.ExifTags import TAGS, GPSTAGS
+import requests
+
+
+def get_city_name(longitude, latitude):
+    token = 'YOUR_TOKEN'
+    url = f'https://api.mapbox.com/geocoding/v5/mapbox.places/{latitude},{longitude}.json?access_token={token}'
+    response = requests.get(url)
+    return response.json()['features'][0]['place_name']
 
 
 def get_decimal_from_dms(dms, ref):
@@ -19,8 +27,7 @@ def get_latitude_longitude(geotags):
     lat = get_decimal_from_dms(geotags['GPSLatitude'], geotags['GPSLatitudeRef'])
     lon = get_decimal_from_dms(geotags['GPSLongitude'], geotags['GPSLongitudeRef'])
 
-    result = dict(latitude=lat, longitude=lon)
-    return result
+    return dict(latitude=lat, longitude=lon)
 
 
 def get_degrees(exif):
@@ -43,8 +50,7 @@ def handle_uploaded_image(image):
     if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
         coordinates = get_degrees(exif)
         location = get_latitude_longitude(coordinates)
-        result = dict(location=location, exif=exif)
-        return result
+        get_city_name(location['latitude'], location['longitude'])
+        return dict(location=location, exif=exif)
     else:
-        result = dict(exif=exif)
-        return result
+        return None

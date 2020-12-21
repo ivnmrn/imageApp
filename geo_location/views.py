@@ -11,7 +11,7 @@ def upload_file(request):
         if form.is_valid():
             result = handle_uploaded_image(request.FILES['file'])
             if result:
-                data_json = dumps(result['location'])
+                data_json = dumps(result['coordinates'])
                 return render(request, 'map.html', {'coordinates': data_json, 'exif': result['exif']})
             else:
                 return render(request, 'coordinates_not_found.html')

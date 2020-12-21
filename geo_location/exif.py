@@ -48,9 +48,9 @@ def handle_uploaded_image(image):
                 exif[ExifTags.TAGS[key]] = value
 
     if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
-        coordinates = get_degrees(exif)
-        location = get_latitude_longitude(coordinates)
-        get_city_name(location['latitude'], location['longitude'])
-        return dict(location=location, exif=exif)
+        raw_coordinates = get_degrees(exif)
+        coordinates = get_latitude_longitude(raw_coordinates)
+        location = get_city_name(coordinates['latitude'], coordinates['longitude'])
+        return dict(coordinates=coordinates, exif=exif)
     else:
         return None

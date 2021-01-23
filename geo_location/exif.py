@@ -38,8 +38,6 @@ def handle_uploaded_image(image):
     if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
         coordinates = get_degrees(exif)
         location = get_latitude_longitude(coordinates)
-        result = dict(location=location, exif=exif)
-        return result
+        return dict(location=location, exif=exif)
     else:
-        result = dict(exif=exif)
-        return result
+        return dict(exif=exif)

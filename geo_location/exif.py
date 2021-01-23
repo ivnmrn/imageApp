@@ -34,7 +34,6 @@ def handle_uploaded_image(image):
         for key, value in img._getexif().items():
             if key in ExifTags.TAGS and key != 37500:
                 exif[ExifTags.TAGS[key]] = value
-
     if 'GPSInfo' in exif and exif['GPSInfo'][2] != ((0, 0), (0, 0), (0, 0)):
         coordinates = get_degrees(exif)
         location = get_latitude_longitude(coordinates)
